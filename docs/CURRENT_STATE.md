@@ -9,7 +9,7 @@ Last updated: 2026-05-24
 # 1. Current Phase
 
 Current phase:
-- operational stabilisation
+- Acquisition proof-of-concept completed
 - prototype review
 - governance establishment
 - v0.1 rebuild planning
@@ -28,6 +28,10 @@ Confirmed established:
 - constitutional architecture document
 - prototype operational artefacts
 - prototype repository references
+- first acquisition script implemented
+- first CESE artefact acquired
+- manifest structure established
+- SHA-256 provenance tracking operational
 
 ---
 
@@ -41,6 +45,7 @@ Current canonical documents:
 - PIPELINE_MAP.md
 - ACTIVE_ISSUES.md
 - CHAT_HANDOFF_PROTOCOL.md
+- SCRIPTING_CONVENTIONS.md
 
 ---
 
