@@ -1,7 +1,7 @@
 # CHAT_INDEX.md
 
 Status: canonical chat registry  
-Version: v0.2  
+Version: v0.3  
 Last updated: 2026-06-04
 
 ---
@@ -98,10 +98,11 @@ Major outcomes:
 Canonical artefacts:
 
 - Architectural initiation prompt
+- chats/prompts/ARCH-001.txt
 
 Commit range:
 
-None
+0c9c07e
 
 Status note:
 
@@ -194,6 +195,8 @@ Canonical artefacts produced or substantially revised:
 - README.md
 - requirements.txt
 - .gitignore
+- chats/prompts/PM-001_init.txt
+- chats/prompts/retirement.txt
 
 Commit range:
 
@@ -219,6 +222,82 @@ It may be interrogated for clarification but must not be used for new project de
 
 ---
 
+## PM-002 — Implementation Coordination
+
+Status: Active
+
+Role:
+
+Project management / operational coordination
+
+Started:
+
+2026-06-04
+
+Purpose:
+
+Coordinate implementation after PM-001 retirement, maintain bounded milestones, track commits, prevent scope drift, support acquisition validation, extraction-readiness work, and bounded implementation progress.
+
+Major outcomes:
+
+- Validated acquisition manifest against preserved raw artefacts
+- Added acquisition manifest validation script
+- Established embedded-text PDF inspection workflow
+- Confirmed selected CESE PDFs contain extractable embedded text
+- Confirmed OCR is not required for selected test artefacts
+- Identified formal reference-section markers in selected CESE report PDFs
+- Confirmed infographic-style artefacts may contain citations without formal reference sections
+- Added minimum viable raw reference-section extraction workflow
+- Successfully extracted raw reference sections from selected CESE report PDFs
+- Confirmed non-reference-section infographic exits gracefully without false extraction
+- Updated CURRENT_STATE.md to reflect validated acquisition and raw reference-section extraction state
+- Updated CHAT_INDEX.md
+- Updated .gitignore for generated/local artefacts
+- Added curated chat prompt files under chats/prompts/
+- Pushed PM-002 implementation commits to GitHub
+
+Canonical artefacts produced or substantially revised:
+
+- scripts/validate_acquisition_manifest.py
+- scripts/inspect_pdf_text.py
+- scripts/extract_reference_section.py
+- docs/CURRENT_STATE.md
+- docs/CHAT_INDEX.md
+- .gitignore
+- chats/prompts/ARCH-001.txt
+- chats/prompts/PM-001_init.txt
+- chats/prompts/PM-002_init.txt
+- chats/prompts/retirement.txt
+
+Working artefacts generated but not necessarily versioned:
+
+- data/working/text_inspection/2017-cognitive-load-theory.txt
+- data/working/text_inspection/2020-classroom-management-literature-review.txt
+- data/working/text_inspection/2020-classroom-management-infographic.txt
+- data/working/reference_sections/2017-cognitive-load-theory_references.txt
+- data/working/reference_sections/2020-classroom-management-literature-review_references.txt
+
+Commit range:
+
+34b6ffa → 0c9c07e
+
+Commit register:
+
+| Commit | Message |
+|----------|----------|
+| 34b6ffa | Add acquisition manifest validation script |
+| c0e5c28 | Add PDF text inspection script |
+| 8850670 | Add reference section extraction script |
+| 0c9c07e | Update project state and gitignore |
+
+Status note:
+
+Current active PM chat.
+
+The immediate next implementation task is reference-section quality inspection, not citation parsing, metadata enrichment, or database construction.
+
+---
+
 # 5. Current Active Chats
 
 ## ARCH-002 — Prototype Review Plan
@@ -235,42 +314,21 @@ Architectural authority
 
 ## PM-002 — Implementation Coordination
 
-Status: Active
+Status:
+
+Active
 
 Role:
 
 Project management / operational coordination
 
-Started:
+Current milestone:
 
-2026-06-04
+Reference-section quality inspection readiness.
 
-Purpose:
+Next bounded implementation task:
 
-Coordinate implementation after PM-001 retirement, maintain bounded milestones, track commits, prevent scope drift, support acquisition validation and extraction-readiness work.
-
-Major outcomes:
-
-- Validated acquisition manifest against preserved raw artefacts
-- Added acquisition manifest validation script
-
-Canonical artefacts produced or substantially revised:
-
-- scripts/validate_acquisition_manifest.py
-
-Commit range:
-
-34b6ffa →
-
-Commit register:
-
-| Commit | Message |
-|----------|----------|
-| 34b6ffa | Add acquisition manifest validation script |
-
-Status note:
-
-Current active PM chat.
+    scripts/inspect_reference_section.py
 
 ---
 
