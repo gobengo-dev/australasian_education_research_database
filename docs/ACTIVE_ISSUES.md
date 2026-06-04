@@ -2,13 +2,26 @@
 
 Status: canonical operational issues register
 Version: v0.1
-Last updated: 2026-05-24
+Last updated: 2026-06-04
 
 ---
 
-# 1. Critical Risks
+# 1. Purpose
+
+This document records active operational risks, unresolved questions, and deferred concerns.
+
+Only items that currently affect delivery, continuity, scope control, or operational execution should appear here.
+
+This is not a backlog.
+
+Resolved issues should be removed rather than accumulated.
+
+---
+
+# 2. Active Risks
 
 ## ISSUE-001
+
 Title:
 Scope expansion pressure
 
@@ -16,13 +29,17 @@ Severity:
 Critical
 
 Description:
-Project naturally drifts toward ecosystem-scale infrastructure.
+
+The project naturally encourages expansion toward ecosystem-scale infrastructure, large-scale acquisition, advanced metadata systems, identity resolution, and analytical platforms.
+
+This creates risk of delaying delivery of a functioning v0.1 system.
 
 Current mitigation:
+
 - bounded v0.1 scope
-- constitutional principles
-- milestone discipline
-- deferred scope policy
+- constitutional architectural principles
+- milestone-based delivery
+- explicit deferral policy
 
 Status:
 Active
@@ -30,6 +47,7 @@ Active
 ---
 
 ## ISSUE-002
+
 Title:
 Architecture elaboration replacing implementation
 
@@ -37,12 +55,15 @@ Severity:
 Critical
 
 Description:
-Risk of excessive architectural refinement before operational workflows exist.
+
+Project effort may drift toward designing future systems rather than implementing current capabilities.
 
 Current mitigation:
+
 - acquisition-first sequencing
-- operational milestone gating
-- visible deliverables requirement
+- implementation milestones
+- visible deliverables
+- architecture chat separation
 
 Status:
 Active
@@ -50,41 +71,51 @@ Active
 ---
 
 ## ISSUE-003
+
 Title:
-Operational fragmentation across chats
+Extraction layer complexity
 
 Severity:
 High
 
 Description:
-Too many chats or unclear authority boundaries may increase restart friction and drift risk.
+
+The next project phase introduces significant uncertainty.
+
+Reference extraction from PDFs may prove substantially more complex than acquisition.
 
 Current mitigation:
-- minimal chat structure
-- operational canon documents
-- handoff protocol
+
+- acquisition layer completed first
+- extraction deliberately deferred
+- extraction scope not yet expanded
 
 Status:
 Active
 
 ---
 
-# 2. High Risks
-
 ## ISSUE-004
+
 Title:
-Invisible infrastructure work
+Operational continuity after interruption
 
 Severity:
 High
 
 Description:
-Large effort may produce little visible analytical capability.
+
+The project is expected to progress intermittently.
+
+Extended interruptions may increase restart friction and decision drift.
 
 Current mitigation:
-- bounded milestones
-- visible outputs
-- short implementation loops
+
+- canonical operational documents
+- scripting conventions
+- acquisition manifests
+- Git version control
+- repository discipline
 
 Status:
 Active
@@ -92,52 +123,165 @@ Active
 ---
 
 ## ISSUE-005
+
 Title:
-Prototype complexity inheritance
+Premature analytical infrastructure
 
 Severity:
 High
 
 Description:
-Prototype artefacts may unintentionally reintroduce excessive complexity.
+
+There is pressure to begin designing databases, schemas, enrichment workflows, and analytical systems before extraction requirements are understood.
 
 Current mitigation:
-- explicit prototype review
-- salvage-only reuse policy
-- constitutional scope discipline
+
+- acquisition before extraction
+- extraction before enrichment
+- enrichment before analysis
 
 Status:
 Active
 
 ---
 
-# 3. Operational Unknowns
+# 3. Current Operational Unknowns
 
-Unresolved:
+The following questions remain unresolved.
 
-- authoritative repository structure
-- exact acquisition implementation strategy
-- extraction tooling choice
-- manifest structure
-- canonicalisation scope boundary
-- enrichment boundary
+These are not blockers.
 
-Current policy:
-- resolve incrementally
-- avoid speculative infrastructure
+They should be resolved when required by implementation.
 
 ---
 
-# 4. Deferred Concerns
+## UNKNOWN-001
+
+Title:
+Reference extraction workflow
+
+Status:
+Unresolved
+
+Question:
+
+What is the minimum viable workflow for extracting references from acquired PDFs?
+
+---
+
+## UNKNOWN-002
+
+Title:
+Extraction provenance model
+
+Status:
+Unresolved
+
+Question:
+
+What provenance information must be recorded for extraction activities?
+
+---
+
+## UNKNOWN-003
+
+Title:
+Citation inventory structure
+
+Status:
+Unresolved
+
+Question:
+
+How should extracted references be stored and tracked?
+
+---
+
+## UNKNOWN-004
+
+Title:
+OpenAlex integration strategy
+
+Status:
+Unresolved
+
+Question:
+
+How should OpenAlex be introduced after extraction is operational?
+
+---
+
+## UNKNOWN-005
+
+Title:
+Crossref integration strategy
+
+Status:
+Unresolved
+
+Question:
+
+How should Crossref be introduced after extraction is operational?
+
+---
+
+# 4. Resolved Since Project Commencement
+
+Resolved:
+
+- repository structure established
+- Git repository operational
+- GitHub repository synchronised
+- Python environment established
+- acquisition manifest established
+- acquisition workflow implemented
+- single-report acquisition validated
+- batch acquisition validated
+- initial CESE acquisition corpus established
+- scripting conventions established
+
+These items should not be re-opened unless implementation experience identifies a genuine deficiency.
+
+---
+
+# 5. Deferred Concerns
+
+The following items are intentionally out of scope for the current phase.
+
+Deferred means:
+
+- not required for current milestone
+- not actively being designed
+- not currently blocking delivery
+
+---
 
 Deferred:
 
-- broad AU/NZ ecosystem mapping
+- broad AU/NZ ecosystem acquisition
 - advanced identity resolution
-- broad enrichment pipelines
-- semantic web infrastructure
+- ORCID reconciliation
+- institutional reconciliation
 - graph databases
-- advanced NLP systems
+- semantic web infrastructure
+- large-scale enrichment pipelines
+- advanced NLP workflows
+- publication infrastructure
+- DOI assignment strategy
+- ecosystem-wide analytical products
 
-Deferred means:
-- not required for v0.1 delivery
+---
+
+# 6. Next Issue Review Trigger
+
+Review this document when one of the following occurs:
+
+- extraction work begins
+- new infrastructure is proposed
+- scope expands significantly
+- operational complexity increases materially
+- a current mitigation proves inadequate
+
+Do not update this document merely because work progresses.
+
+Only update it when risks, unknowns, or deferred concerns materially change.
