@@ -1,0 +1,20 @@
+This chat is now retired.
+
+From this point onward:
+- do not make new project decisions in this chat
+- do not develop new workflows in this chat
+- do not revise canonical project documents from this chat
+- do not treat this chat as active operational authority
+
+Permitted uses:
+- answer questions about what happened in this chat
+- clarify prior reasoning
+- identify decisions made here
+- support handover into active chats
+
+Current authoritative project state now lives in:
+- repository files
+- canonical docs
+- active PM / Architecture / Build chats
+
+If future work is requested here, redirect the user to the current active chat listed in CHAT_INDEX.md.

@@ -1,8 +1,8 @@
 # CHAT_INDEX.md
 
 Status: canonical chat registry  
-Version: v0.1  
-Last updated: 2026-06-04  
+Version: v0.2  
+Last updated: 2026-06-04
 
 ---
 
@@ -10,16 +10,21 @@ Last updated: 2026-06-04
 
 This document records the active and retired ChatGPT chats used in the Australasian Educational Research project.
 
-It is intended to:
+Its purpose is to:
 
-- reduce chat drift
+- reduce conversational drift
 - clarify chat authority
 - preserve operational continuity
 - identify which chats produced which artefacts
 - link project work to Git commits
 - prevent retired chats from being used for new decisions
+- provide a navigable history of project development
 
 This document is not a transcript archive.
+
+Chat transcripts remain in ChatGPT or external archives.
+
+Only operationally significant information should be recorded here.
 
 ---
 
@@ -31,15 +36,15 @@ The chat may be used for new project work within its defined role.
 
 ## Retired
 
-The chat may be interrogated for clarification, but must not be used for new project decisions, new implementation work, or canonical document revisions.
+The chat may be interrogated for clarification but must not be used for new project decisions, implementation work, or canonical document revisions.
 
 ## Superseded
 
-The chat has been replaced by a later chat or canonical document.
+The chat has been replaced by a later chat or canonical artefact.
 
 ## Historical
 
-The chat is preserved only as background evidence of prior thinking.
+The chat is preserved as background evidence of prior thinking.
 
 ---
 
@@ -65,39 +70,114 @@ Examples:
     BUILD-001 Acquisition Workflow
     REVIEW-001 Prototype Artefact Review
 
+Chat numbers should never be reused.
+
 ---
 
 # 4. Chat Registry
 
-## PM-001 — Operation Coordination Focus
+## ARCH-001 — Initial Conversation
 
-Status: Retired  
-Role: Project management / operational coordination  
-Started: 2026-05-24  
-Retired: 2026-06-04  
+Status: Retired
+
+Role:
+
+Architecture establishment
 
 Purpose:
 
-Established the operational management layer for the project and moved the project from governance/planning into active acquisition implementation.
+Create and refine the constitutional architecture prompt for the project.
 
 Major outcomes:
 
-- Confirmed PM role boundaries
+- Defined architecture-chat responsibilities
+- Defined architecture-chat boundaries
+- Produced architecture-chat initiation prompt
+- Established architectural philosophy
+
+Canonical artefacts:
+
+- Architectural initiation prompt
+
+Commit range:
+
+None
+
+Status note:
+
+Retired following creation of ARCH-002.
+
+---
+
+## ARCH-002 — Prototype Review Plan
+
+Status: Active
+
+Role:
+
+Architectural authority
+
+Purpose:
+
+Review prototype artefacts and establish constitutional architectural principles for the project.
+
+Major outcomes:
+
+- Prototype review
+- Architectural review
+- Creation of ARCHITECTURAL_PRINCIPLES.md
+- Establishment of constitutional architecture authority
+
+Canonical artefacts:
+
+- docs/ARCHITECTURAL_PRINCIPLES.md
+
+Commit range:
+
+Not tracked through this chat.
+
+Status note:
+
+Current architectural authority.
+
+---
+
+## PM-001 — Operation Coordination Focus
+
+Status: Retired
+
+Role:
+
+Project management / operational coordination
+
+Started:
+
+2026-05-24
+
+Retired:
+
+2026-06-04
+
+Purpose:
+
+Move the project from governance establishment into operational implementation.
+
+Major outcomes:
+
+- Established PM governance model
 - Reviewed prototype operational artefacts
-- Produced fresh canonical operational documents
+- Produced canonical operational documents
 - Established repository structure
 - Established Python environment discipline
 - Established Git/GitHub workflow
-- Created scripting conventions
-- Implemented first acquisition workflow
+- Established scripting conventions
+- Implemented acquisition workflows
 - Acquired first CESE artefact
-- Implemented batch CESE acquisition
 - Acquired initial CESE seed corpus
-- Updated CURRENT_STATE.md
-- Updated ACTIVE_ISSUES.md
-- Planned transition to PM-002
+- Established operator governance
+- Established chat governance
 
-Canonical artefacts produced or updated:
+Canonical artefacts produced or substantially revised:
 
 - docs/MASTER_PROJECT_BRIEF.md
 - docs/CURRENT_STATE.md
@@ -105,6 +185,8 @@ Canonical artefacts produced or updated:
 - docs/PIPELINE_MAP.md
 - docs/CHAT_HANDOFF_PROTOCOL.md
 - docs/SCRIPTING_CONVENTIONS.md
+- docs/CHAT_INDEX.md
+- docs/OPERATOR_WORKFLOW.md
 - manifests/acquisition_manifest.jsonl
 - manifests/acquisition_inputs/cese_initial_seed_urls.txt
 - scripts/acquire_single_report.py
@@ -113,54 +195,82 @@ Canonical artefacts produced or updated:
 - requirements.txt
 - .gitignore
 
+Commit range:
+
+8f015c4 → 4495c08
+
 Commit register:
 
-| Commit | Commit message | Status | Notes |
-|---|---|---|---|
-| 04a1837 | unknown GitHub starter commit | overwritten | Pre-existing remote commit overwritten during initial repository synchronisation. |
-| 8f015c4 | Initial operational scaffold | confirmed | First confirmed local project commit; force-pushed to remote with --force-with-lease. |
-| unknown | Add scripting conventions | pending verification | Commit was recommended in PM-001; hash not confirmed in chat. |
-| unknown | Implement first provenance-aware acquisition workflow | pending verification | Commit was recommended in PM-001; hash not confirmed in chat. |
-| unknown | Acquire initial CESE report corpus | pending verification | Commit was recommended in PM-001; hash not confirmed in chat. |
-| unknown | Update current state and active issues | pending verification | Work reported complete before PM-002 planning; hash not confirmed in chat. |
+| Commit | Message |
+|----------|----------|
+| 8f015c4 | Initial operational scaffold |
+| b0151fd | Add scripting conventions |
+| e27cacf | Add first acquisition workflow |
+| 9c744af | Implement first provenance-aware acquisition workflow |
+| eefafc5 | Acquire initial CESE report corpus |
+| 5c452c2 | Acquire initial CESE report corpus |
+| 4495c08 | Add chat and user management |
 
 Status note:
 
-This chat is retired. It may be interrogated for clarification, but must not be used for new project decisions, implementation work, or canonical document revisions.
+This chat is retired.
+
+It may be interrogated for clarification but must not be used for new project decisions, implementation work, or canonical document revisions.
 
 ---
 
-# 5. Active Chat
+# 5. Current Active Chats
+
+## ARCH-002 — Prototype Review Plan
+
+Status:
+
+Active
+
+Role:
+
+Architectural authority
+
+---
 
 ## PM-002 — Implementation Coordination
 
-Status: Proposed  
-Role: Project management / operational coordination  
-Started: not yet started  
+Status: Active
+
+Role:
+
+Project management / operational coordination
+
+Started:
+
+2026-06-04
 
 Purpose:
 
-Coordinate implementation after acquisition proof-of-concept and initial CESE seed corpus acquisition.
+Coordinate implementation after PM-001 retirement, maintain bounded milestones, track commits, prevent scope drift, support acquisition validation and extraction-readiness work.
 
-Expected focus:
+Major outcomes:
 
-- acquisition validation
-- extraction planning
-- bounded implementation milestones
-- operational continuity
-- scope discipline
-- handoff from PM-001
+- Validated acquisition manifest against preserved raw artefacts
+- Added acquisition manifest validation script
 
-Authoritative starting documents:
+Canonical artefacts produced or substantially revised:
 
-- docs/ARCHITECTURAL_PRINCIPLES.md
-- docs/MASTER_PROJECT_BRIEF.md
-- docs/CURRENT_STATE.md
-- docs/ACTIVE_ISSUES.md
-- docs/PIPELINE_MAP.md
-- docs/CHAT_HANDOFF_PROTOCOL.md
-- docs/SCRIPTING_CONVENTIONS.md
-- docs/CHAT_INDEX.md
+- scripts/validate_acquisition_manifest.py
+
+Commit range:
+
+34b6ffa →
+
+Commit register:
+
+| Commit | Message |
+|----------|----------|
+| 34b6ffa | Add acquisition manifest validation script |
+
+Status note:
+
+Current active PM chat.
 
 ---
 
@@ -193,11 +303,16 @@ When a chat is retired, paste the following into that chat:
 
 # 7. Maintenance Rule
 
-CHAT_INDEX.md should be updated when:
+Update CHAT_INDEX.md when:
 
 - a new project chat is created
 - a chat is retired
-- a chat produces or substantially revises canonical artefacts
-- commits are made under the coordination of a chat
+- a chat produces a canonical artefact
+- a chat substantially revises a canonical artefact
+- commits occur under the coordination of a chat
 
-Routine conversational details should not be recorded here.
+Record all commits associated with a chat.
+
+Do not attempt to classify commits as major or minor.
+
+Routine conversational details should not be recorded.

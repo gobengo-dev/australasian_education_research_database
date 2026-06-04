@@ -1,26 +1,55 @@
 # Python
-__pycache__/
-*.pyc
+pycache/
+.pyc
+.pyo
+.pyd
 
 # Virtual environments
 venv/
+.venv/
+env/
 
 # macOS
 .DS_Store
 
 # Environment files
 .env
+.env.
 
 # Logs
 logs/
+!logs/.gitkeep
 
-# Data
+# Raw acquired artefacts
+#
+# Raw source files are preserved locally and described by manifests.
+# They are not committed by default.
 data/raw/
-data/working/
+!data/raw/.gitkeep
+!data/raw/aero/
+!data/raw/aero/.gitkeep
+!data/raw/cese/
+!data/raw/cese/.gitkeep
 
-# DuckDB
+# Working/generated data
+#
+# Working outputs should be reproducible from scripts and source artefacts.
+data/working/*
+!data/working/.gitkeep
+
+# Chat project environment
+#
+# Curated prompts may be versioned.
+# Chat archives/transcripts are local project-environment material by default.
+chats/archive/*
+!chats/archive/.gitkeep
+
+# DuckDB and database working files
 *.duckdb
+*.duckdb.wal
+*.duckdb.tmp
 *.wal
 
 # Jupyter
 .ipynb_checkpoints/
+*.ipynb
