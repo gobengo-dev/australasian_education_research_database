@@ -1,7 +1,7 @@
 # CHAT_INDEX.md
 
 Status: canonical chat registry  
-Version: v0.3  
+Version: v0.4  
 Last updated: 2026-06-04
 
 ---
@@ -128,6 +128,7 @@ Major outcomes:
 - Architectural review
 - Creation of ARCHITECTURAL_PRINCIPLES.md
 - Establishment of constitutional architecture authority
+- Notified of deferred citation-quality analytical requirement concerning DOI omission and URL integrity analysis
 
 Canonical artefacts:
 
@@ -140,6 +141,8 @@ Not tracked through this chat.
 Status note:
 
 Current architectural authority.
+
+No immediate architectural decision is required on citation-quality analysis, but later schema/provenance design should account for the distinction between raw source citation, parsed reference, matched work, URL status observation, and derived citation-quality claim.
 
 ---
 
@@ -254,6 +257,8 @@ Major outcomes:
 - Updated CHAT_INDEX.md
 - Updated .gitignore for generated/local artefacts
 - Added curated chat prompt files under chats/prompts/
+- Recorded deferred citation-quality requirement covering missing DOI analysis and URL integrity checking
+- Notified ARCH-002 of deferred citation-quality analytical requirement
 - Pushed PM-002 implementation commits to GitHub
 
 Canonical artefacts produced or substantially revised:
@@ -262,6 +267,7 @@ Canonical artefacts produced or substantially revised:
 - scripts/inspect_pdf_text.py
 - scripts/extract_reference_section.py
 - docs/CURRENT_STATE.md
+- docs/ACTIVE_ISSUES.md
 - docs/CHAT_INDEX.md
 - .gitignore
 - chats/prompts/ARCH-001.txt
@@ -279,7 +285,7 @@ Working artefacts generated but not necessarily versioned:
 
 Commit range:
 
-34b6ffa → 0c9c07e
+34b6ffa → 545d1e9
 
 Commit register:
 
@@ -289,12 +295,15 @@ Commit register:
 | c0e5c28 | Add PDF text inspection script |
 | 8850670 | Add reference section extraction script |
 | 0c9c07e | Update project state and gitignore |
+| e7f8126 | Update chat index commit register |
+| 545d1e9 | Update active issues for citation quality requirements |
+| c630aad | Add reference inspection and boundary detection workflows |
 
 Status note:
 
 Current active PM chat.
 
-The immediate next implementation task is reference-section quality inspection, not citation parsing, metadata enrichment, or database construction.
+The immediate next implementation task is reference-section quality inspection, not citation parsing, metadata enrichment, URL checking, DOI omission analysis, or database construction.
 
 ---
 
@@ -309,6 +318,17 @@ Active
 Role:
 
 Architectural authority
+
+Current note:
+
+ARCH-002 has been notified of a deferred analytical requirement concerning citation-quality analysis:
+
+- citations where CESE omits a DOI despite the matched work having one
+- citations containing dead, redirected, unstable, or otherwise unavailable URLs
+
+No immediate architectural decision is required.
+
+This should inform later schema, provenance, canonicalisation, and enrichment design.
 
 ---
 
@@ -329,6 +349,17 @@ Reference-section quality inspection readiness.
 Next bounded implementation task:
 
     scripts/inspect_reference_section.py
+
+Current deferrals:
+
+- individual reference parsing
+- citation inventory implementation
+- OpenAlex enrichment
+- Crossref enrichment
+- DOI omission analysis
+- URL integrity checking
+- database schema design
+- analytical outputs
 
 ---
 
