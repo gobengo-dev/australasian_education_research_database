@@ -34,6 +34,19 @@ Notes:
     - mutate acquisition manifests
 
     It uses embedded PDF text only.
+
+    Reference marker detection supports both plain and section-numbered
+    headings, for example:
+
+        References
+        Reference list
+        Bibliography
+        7. References
+        7 References
+        1.2 References
+
+    This is marker reconnaissance only. The script reports candidate markers;
+    it does not decide whether a detected section is suitable for parsing.
 """
 
 from __future__ import annotations
@@ -46,10 +59,26 @@ from pathlib import Path
 
 DEFAULT_OUTPUT_DIR = Path("data/working/text_inspection")
 
+# Reference-section marker patterns are intentionally anchored to whole lines.
+# This avoids matching ordinary prose such as "see references below" while
+# allowing formal section headings such as "7. References".
+#
+# Use [ \t] rather than \s inside these patterns because \s can match newlines.
+# Without this guard, a page number on one line followed by "References" on the
+# next line can be incorrectly captured as one marker.
 REFERENCE_MARKER_PATTERNS = [
-    re.compile(r"^\s*references\s*$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^\s*reference list\s*$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^\s*bibliography\s*$", re.IGNORECASE | re.MULTILINE),
+    re.compile(
+        r"^[ \t]*(?:\d+(?:\.\d+)*\.?[ \t]+)?references[ \t]*$",
+        re.IGNORECASE | re.MULTILINE,
+    ),
+    re.compile(
+        r"^[ \t]*(?:\d+(?:\.\d+)*\.?[ \t]+)?reference list[ \t]*$",
+        re.IGNORECASE | re.MULTILINE,
+    ),
+    re.compile(
+        r"^[ \t]*(?:\d+(?:\.\d+)*\.?[ \t]+)?bibliography[ \t]*$",
+        re.IGNORECASE | re.MULTILINE,
+    ),
 ]
 
 
@@ -113,6 +142,7 @@ def find_reference_markers(page_texts: list[str]) -> list[tuple[int, str]]:
     for page_index, page_text in enumerate(page_texts):
         for pattern in REFERENCE_MARKER_PATTERNS:
             match = pattern.search(page_text)
+
             if match:
                 matches.append((page_index + 1, match.group(0).strip()))
 
@@ -219,17 +249,15 @@ def inspect_pdf_text(
     print("OCR performed: no")
     print()
 
-    if reference_markers:
-        print("Reference marker candidates")
-        print("-" * 27)
+    print("Reference marker candidates")
+    print("-" * 27)
 
+    if reference_markers:
         for page_number, marker in reference_markers:
             print(f"- Page {page_number}: {marker}")
 
         print()
     else:
-        print("Reference marker candidates")
-        print("-" * 27)
         print("- None found")
         print()
 

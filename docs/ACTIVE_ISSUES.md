@@ -1,8 +1,8 @@
 # ACTIVE_ISSUES.md
 
 Status: canonical operational issues register  
-Version: v0.2  
-Last updated: 2026-06-04
+Version: v0.3  
+Last updated: 2026-06-05
 
 ---
 
@@ -41,6 +41,7 @@ Current mitigation:
 - milestone-based delivery
 - explicit deferral policy
 - maintain distinction between current implementation tasks and future analytical requirements
+- continue treating current extraction work as minimum viable evidence-gathering, not full citation infrastructure
 
 Status:  
 Active
@@ -69,6 +70,7 @@ Current mitigation:
 - visible deliverables
 - architecture chat separation
 - defer schema and canonicalisation decisions until concrete extracted examples exist
+- treat current reference-boundary outputs as draft candidates, not final citation records
 
 Status:  
 Active
@@ -87,7 +89,9 @@ Description:
 
 Reference extraction from PDFs introduces substantially more complexity than acquisition.
 
-Raw reference-section extraction has now been demonstrated on selected CESE PDFs, but individual reference parsing has not yet been implemented.
+Raw reference-section extraction has now been demonstrated on selected CESE PDFs, and draft individual reference-boundary detection has been implemented for formal reference sections.
+
+However, individual reference parsing has not yet been implemented, and boundary detection remains heuristic.
 
 Known complexity includes:
 
@@ -95,17 +99,27 @@ Known complexity includes:
 - image-adjacent reference text
 - split letters and split words in extracted text
 - compressed adjacent references
+- publisher or institution tails being mistaken for new references
+- section-numbered reference headings
+- APA-style references with parenthesised years and initials
+- older CESE author-date references with unparenthesised years
+- legal or statutory references
 - artefacts with citations but no formal references section
-- distinction between raw section extraction and individual citation parsing
+- footnote-only citation formats
+- distinction between raw section extraction, boundary detection, and structured citation parsing
 
 Current mitigation:
 
 - acquisition layer completed and validated first
 - embedded-text inspection implemented
 - raw reference-section extraction implemented
+- numbered reference-heading detection implemented
+- reference-section inspection implemented
+- draft reference-boundary detection implemented
 - OCR deferred unless clearly required
 - infographic and footnote-style citation extraction deferred
-- next step limited to reference-section quality inspection
+- APA-style boundary problems identified but not yet solved
+- current outputs treated as candidate references requiring review, not final citation inventory records
 
 Status:  
 Active
@@ -126,6 +140,8 @@ The project is expected to progress intermittently.
 
 Extended interruptions may increase restart friction and decision drift.
 
+The risk increases during exploratory implementation periods when several scripts and temporary outputs are created before commit discipline catches up.
+
 Current mitigation:
 
 - canonical operational documents
@@ -136,6 +152,8 @@ Current mitigation:
 - chat registry
 - commit tracking
 - small bounded implementation milestones
+- clean up temporary draft files before committing
+- avoid preserving draft script versions in the repository once a canonical script version exists
 
 Status:  
 Active
@@ -158,9 +176,11 @@ Current mitigation:
 
 - acquisition before extraction
 - raw extraction before reference parsing
+- reference-boundary detection before structured parsing
 - reference parsing before enrichment
 - enrichment before analysis
 - defer DOI omission and dead-link analysis until individual citation records exist
+- defer schema design until enough real citation examples have been inspected
 
 Status:  
 Active
@@ -199,6 +219,39 @@ Active
 
 ---
 
+## ISSUE-007
+
+Title:  
+Reference-boundary false splits from publisher or institution tails
+
+Severity:  
+Medium
+
+Description:
+
+Draft reference-boundary detection can mistakenly split publisher or institution tails into separate candidate references.
+
+Observed examples include:
+
+- a publisher tail such as “Grattan Institute.”
+- an institution tail after an abbreviation such as “U.S. Department of Education, Washington, DC.”
+
+This occurs because embedded boundary detection treats terminal punctuation followed by a plausible organisation-like phrase as a possible new reference.
+
+This is a known boundary-detector issue, not a raw extraction failure.
+
+Current mitigation:
+
+- treat boundary outputs as candidate references requiring review
+- retain confidence and embedded-split flags in candidate outputs
+- do not treat reference candidates as final citation records
+- defer refinement until this issue blocks the next implementation stage or recurs across enough examples to justify a bounded fix
+
+Status:  
+Active
+
+---
+
 # 3. Current Operational Unknowns
 
 The following questions remain unresolved.
@@ -212,45 +265,68 @@ They should be resolved when required by implementation.
 ## UNKNOWN-001
 
 Title:  
-Reference-section quality inspection workflow
+Minimum viable individual reference parsing workflow
 
 Status:  
 Unresolved
 
 Question:
 
-What is the minimum viable workflow for inspecting extracted raw reference sections before attempting individual reference parsing?
+How should candidate reference boundaries be transformed into individual reference records suitable for later citation inventory work?
 
 Current context:
 
-Raw reference-section extraction has been demonstrated.
+The following scripts now exist or are in active implementation:
 
-The next implementation step is expected to be:
+- scripts/inspect_pdf_text.py
+- scripts/extract_reference_section.py
+- scripts/inspect_reference_section.py
+- scripts/detect_reference_boundaries.py
 
-    scripts/inspect_reference_section.py
+These currently support reconnaissance, raw reference-section extraction, reference-section inspection, and draft candidate boundary detection.
+
+They do not yet parse candidate references into structured fields.
+
+Known considerations:
+
+- author-date citation style
+- APA-style citation variants
+- multi-line reference entries
+- page-layout artefacts
+- split words and initials
+- compressed adjacent references
+- publisher-tail false splits
+- legal/statutory references
+- non-standard artefacts without formal reference sections
 
 ---
 
 ## UNKNOWN-002
 
 Title:  
-Individual reference parsing workflow
+Reference-boundary validation threshold
 
 Status:  
 Unresolved
 
 Question:
 
-How should raw extracted reference sections be split into individual reference records?
+What level of accuracy is sufficient for draft candidate reference boundaries before moving to structured parsing?
 
-Known considerations:
+Current context:
 
-- author-date citation style
-- multi-line reference entries
-- page-layout artefacts
-- split words and initials
-- compressed adjacent references
-- non-standard artefacts without formal reference sections
+Boundary detection has been tested against selected CESE formal-reference reports.
+
+Observed classes include:
+
+- older CESE author-date references
+- later CESE author-date references with parenthesised years
+- long formal reference sections
+- formal reports with no reference section
+- APA-style references with problematic initial splitting
+- legal/statutory references such as Education Act 1990 (NSW)
+
+The project has not yet defined a formal acceptance threshold for moving from candidate references to parsed citation records.
 
 ---
 
@@ -281,12 +357,29 @@ Raw reference-section extraction currently records:
 - stop marker page, where detected
 - page-delimited extracted text
 
+Candidate reference-boundary detection currently records:
+
+- source reference-section path
+- candidate ID
+- start page
+- end page
+- source line count
+- boundary reason
+- confidence
+- terminal punctuation flag
+- embedded boundary split flag
+- possible text damage flag
+- contains URL flag
+- contains DOI flag
+- raw candidate text
+
 Still unresolved:
 
 - extraction manifests
-- provenance for individual reference parsing
+- persistent provenance for individual reference parsing
 - provenance for text cleaning or repair
 - provenance for rejected or uncertain references
+- relationship between raw reference-section extraction, candidate boundaries, parsed references, and later matched works
 
 ---
 
@@ -308,6 +401,7 @@ The citation inventory will likely need to distinguish:
 
 - source document
 - raw reference-section extraction
+- candidate reference boundary record
 - individual raw reference string
 - parsed citation fields
 - parsing confidence
@@ -425,6 +519,63 @@ DOI omission should be treated as a derived analytical claim, not a raw extracti
 
 ---
 
+## UNKNOWN-009
+
+Title:  
+Treatment of non-formal citation formats
+
+Status:  
+Unresolved
+
+Question:
+
+How should the project handle CESE artefacts that contain citations but do not contain a formal reference section?
+
+Current context:
+
+At least two non-formal classes have been observed:
+
+- infographic-style artefacts with limited citations or footnote-like source notes
+- older CESE reports using page-level footnote references rather than a consolidated references section
+
+Known considerations:
+
+These require a different extraction workflow from formal reference-section extraction.
+
+They should not be forced into extract_reference_section.py or detect_reference_boundaries.py.
+
+---
+
+## UNKNOWN-010
+
+Title:  
+APA-style boundary detection
+
+Status:  
+Unresolved
+
+Question:
+
+How should boundary detection handle APA-style references with parenthesised years and author initials?
+
+Current context:
+
+The 2015 tutoring intervention report exposed a failure mode where embedded splitting can over-split author initials.
+
+Example pattern:
+
+- “Britz, M. W., Dixon, J., & McLaughlin, T. F. (1989).”
+
+The current detector may split incorrectly after initials such as “M.” or “P.” if the following text later resembles a reference start.
+
+Known considerations:
+
+This appears to be a general style-class issue rather than a single idiosyncratic reference.
+
+It should be addressed separately from older CESE author-date boundary detection.
+
+---
+
 # 4. Resolved Since Project Commencement
 
 Resolved:
@@ -446,6 +597,13 @@ Resolved:
 - raw reference-section extraction implemented
 - selected formal CESE report reference sections extracted successfully
 - infographic-style artefact handled gracefully as no formal reference section
+- reference-section inspection implemented
+- draft reference-boundary detection implemented
+- numbered reference-section headings detected by PDF inspection
+- numbered reference-section headings handled by reference-section extraction
+- numbered reference-section headings filtered from boundary detection input
+- selected long formal CESE reference section processed into candidate references
+- statutory reference example handled as a candidate reference
 
 These items should not be re-opened unless implementation experience identifies a genuine deficiency.
 
@@ -467,7 +625,7 @@ Deferred:
 
 - broad AU/NZ ecosystem acquisition
 - broad AERO acquisition expansion
-- individual reference parsing beyond quality inspection
+- structured individual reference parsing beyond candidate boundary detection
 - citation inventory implementation
 - extraction manifests
 - OpenAlex enrichment
@@ -494,14 +652,16 @@ Deferred:
 
 The following items should be raised with the architecture chat before schema, canonicalisation, or enrichment design begins:
 
-- distinction between raw source citation, parsed reference, matched work, and derived quality claim
+- distinction between raw source citation, extracted reference section, candidate reference boundary, parsed reference, matched work, and derived quality claim
 - provenance expectations for DOI omission analysis
 - provenance expectations for URL integrity checking
 - whether URL status should be modelled as a timestamped observation rather than a citation attribute
 - how to represent citation-quality findings without overstating certainty
 - whether citation-quality analysis belongs in v0.1 or should remain a later analytical layer
+- how extraction-stage confidence should relate to later citation inventory records
+- whether candidate reference boundaries should be persisted as a first-class intermediate artefact
 
-No immediate architecture decision is required before reference-section quality inspection.
+No immediate architecture decision is required before further minimum viable extraction validation.
 
 ---
 
@@ -509,13 +669,15 @@ No immediate architecture decision is required before reference-section quality 
 
 Review this document when one of the following occurs:
 
-- reference-section quality inspection is implemented
 - individual reference parsing begins
 - extraction manifests are proposed
 - citation inventory structure is proposed
 - OpenAlex or Crossref integration is proposed
 - URL checking is proposed
 - DOI omission analysis is proposed
+- publisher-tail false splits block progress
+- APA-style reference handling becomes the next implementation focus
+- non-formal citation formats become the next implementation focus
 - new infrastructure is proposed
 - scope expands significantly
 - operational complexity increases materially

@@ -49,10 +49,26 @@ from pathlib import Path
 
 DEFAULT_OUTPUT_DIR = Path("data/working/reference_sections")
 
+# Reference-section marker patterns are intentionally anchored to whole lines.
+# This avoids matching ordinary prose such as "see references below" while
+# allowing formal section headings such as "7. References".
+#
+# Use [ \t] rather than \s inside these patterns because \s can match newlines.
+# Without this guard, a page number on one line followed by "References" on the
+# next line can be incorrectly captured as one marker.
 REFERENCE_MARKER_PATTERNS = [
-    re.compile(r"^\s*references\s*$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^\s*reference list\s*$", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^\s*bibliography\s*$", re.IGNORECASE | re.MULTILINE),
+    re.compile(
+        r"^[ \t]*(?:\d+(?:\.\d+)*\.?[ \t]+)?references[ \t]*$",
+        re.IGNORECASE | re.MULTILINE,
+    ),
+    re.compile(
+        r"^[ \t]*(?:\d+(?:\.\d+)*\.?[ \t]+)?reference list[ \t]*$",
+        re.IGNORECASE | re.MULTILINE,
+    ),
+    re.compile(
+        r"^[ \t]*(?:\d+(?:\.\d+)*\.?[ \t]+)?bibliography[ \t]*$",
+        re.IGNORECASE | re.MULTILINE,
+    ),
 ]
 
 DEFAULT_STOP_MARKER_PATTERNS = [
