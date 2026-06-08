@@ -299,6 +299,7 @@ Commit register:
 | 545d1e9 | Update active issues for citation quality requirements |
 | c630aad | Add reference inspection and boundary detection workflows |
 | cadd9bd | Update chat index commit register |
+| 815f9e8 | Add reference candidate review protocol and results |
 
 Status note:
 
