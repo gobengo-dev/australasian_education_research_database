@@ -1,7 +1,7 @@
 # CURRENT_STATE.md
 
 Status: Active  
-Last updated: 2026-06-05
+Last updated: 2026-06-08
 
 ---
 
@@ -9,7 +9,7 @@ Last updated: 2026-06-05
 
 The Australasian Educational Research project is in active implementation.
 
-Governance, operational scaffolding, repository structure, initial acquisition workflows, acquisition validation workflows, minimum viable reference-section extraction workflows, reference-section inspection, and draft reference-boundary detection have been established.
+Governance, operational scaffolding, repository structure, initial acquisition workflows, acquisition validation workflows, minimum viable reference-section extraction workflows, reference-section inspection, draft reference-boundary detection, and reference-candidate review have been established.
 
 The project has successfully transitioned from planning and governance establishment into operational execution.
 
@@ -21,6 +21,9 @@ The project now possesses:
 - a minimum viable raw reference-section extraction script
 - a reference-section inspection script
 - a draft reference-boundary detection script
+- a manual and AI-assisted reference-candidate review protocol
+- reviewed candidate-reference boundary outputs for four selected CESE reports
+- a selected first input for minimum viable structured reference parsing
 - successful extraction tests on selected CESE reports
 - successful candidate-reference boundary detection on selected formal CESE reference sections
 
@@ -45,10 +48,12 @@ Current phase:
 - Minimum viable raw reference-section extraction
 - Reference-section quality inspection
 - Draft candidate reference-boundary detection
+- Manual and AI-assisted candidate-reference review
+- Preparation for minimum viable structured reference parsing
 
 Current objective:
 
-Confirm that formal CESE report PDFs can have raw reference sections extracted from embedded text and split into candidate reference records with enough provenance and confidence information to support later structured reference parsing.
+Begin a minimum viable structured reference parsing experiment using the reviewed 2017 cognitive load candidate-reference output as the first parser baseline.
 
 The project is not yet focused on:
 
@@ -62,6 +67,14 @@ The project is not yet focused on:
 The extraction layer has begun, but only at the raw reference-section and candidate-boundary level.
 
 Structured individual reference parsing has not yet been implemented.
+
+The next implementation step should remain narrow:
+
+- parse reviewed candidate references conservatively
+- preserve raw reference text unchanged
+- extract only low-risk fields
+- record uncertainty explicitly
+- avoid enrichment, matching, URL checking, and database writes
 
 ---
 
@@ -97,6 +110,8 @@ Current scripting conventions:
 - scripts should be conservative, inspectable, and reproducible
 
 Temporary draft script filenames used during exploratory work should not be committed.
+
+Generated files under data/working/ should generally remain reproducible working artefacts unless the project explicitly decides to version them.
 
 ---
 
@@ -668,7 +683,86 @@ Known style classes requiring separate handling:
 
 ---
 
-# 11. Provenance Status
+# 11. Reference-Candidate Review Status
+
+A manual and AI-assisted review protocol has been drafted.
+
+Review protocol document:
+
+    docs/REFERENCE_CANDIDATE_REVIEW_PROTOCOL.md
+
+Review results document:
+
+    docs/REFERENCE_CANDIDATE_REVIEW_RESULTS.md
+
+Purpose:
+
+- assess candidate reference boundary quality
+- decide whether candidate outputs are suitable for structured parsing experiments
+- identify known boundary failure classes
+- avoid relying on chat history for review decisions
+- prevent premature movement into parsing, enrichment, or database design
+
+The review protocol does not:
+
+- validate bibliographic accuracy
+- parse references
+- match works
+- check URLs
+- discover DOIs
+- create citation inventories
+
+Reviewed candidate outputs:
+
+    data/working/reference_candidates/2017-cognitive-load-theory_reference_candidates.txt
+
+    data/working/reference_candidates/2020-classroom-management-literature-review_reference_candidates.txt
+
+    data/working/reference_candidates/2015-effectiveness-of-tutoring-interventions-in-mathematics-for-disadvantaged-students_reference_candidates.txt
+
+    data/working/reference_candidates/revisiting-gifted-education-literature-review_reference_candidates.txt
+
+Review classifications:
+
+2017-cognitive-load-theory_reference_candidates.txt:
+
+- classification: SUITABLE_FOR_PARSING_EXPERIMENT
+- recommended use: first structured parsing baseline
+- reason: strongest reviewed boundary quality; manageable count; no major unresolved boundary failures
+
+2020-classroom-management-literature-review_reference_candidates.txt:
+
+- classification: SUITABLE_WITH_KNOWN_WARNINGS
+- recommended use: second parsing test after baseline
+- reason: mostly usable older CESE author-date style, with known publisher-tail false split and page-19 text damage
+
+revisiting-gifted-education-literature-review_reference_candidates.txt:
+
+- classification: SUITABLE_WITH_KNOWN_WARNINGS
+- recommended use: larger stress-test after baseline
+- reason: large formal reference section; statutory reference handled; known publisher/institution-tail and URL-boundary warnings
+
+2015-effectiveness-of-tutoring-interventions-in-mathematics-for-disadvantaged-students_reference_candidates.txt:
+
+- classification: DEFERRED_STYLE_CLASS
+- recommended use: later APA-style boundary refinement test
+- reason: systematic over-splitting around APA-style initials and recurring merged URL-bearing references
+
+Review conclusion:
+
+The first structured parsing experiment should use:
+
+    data/working/reference_candidates/2017-cognitive-load-theory_reference_candidates.txt
+
+or, preferably, the paired JSONL output if available:
+
+    data/working/reference_candidates/2017-cognitive-load-theory_reference_candidates.jsonl
+
+The 2015 tutoring candidate output should not be used for the first parser experiment.
+
+---
+
+# 12. Provenance Status
 
 Implemented:
 
@@ -684,11 +778,14 @@ Implemented:
 - page-level raw text inspection outputs
 - page-level raw reference-section extraction outputs
 - candidate reference-boundary outputs with confidence and review flags
+- manual and AI-assisted review protocol for candidate reference outputs
+- documented review classifications for current candidate outputs
 
 Partially implemented:
 
 - extraction provenance
 - boundary detection provenance
+- reference-candidate review provenance
 
 Extraction provenance currently includes:
 
@@ -719,6 +816,20 @@ Candidate boundary outputs currently include:
 - contains DOI flag
 - raw candidate text
 
+Reference-candidate review records currently include:
+
+- source PDF
+- reference-section file
+- candidate output file
+- review date
+- reviewer
+- console summary
+- manual checks
+- style class
+- classification
+- decision
+- notes
+
 Not yet implemented:
 
 - extraction manifests
@@ -729,11 +840,11 @@ Not yet implemented:
 
 ---
 
-# 12. Current Milestone
+# 13. Current Milestone
 
 Current milestone:
 
-Minimum viable formal reference-section extraction and draft candidate boundary detection demonstrated.
+Minimum viable formal reference-section extraction, draft candidate boundary detection, and first candidate-output review cycle completed.
 
 Success criteria achieved:
 
@@ -763,6 +874,9 @@ Success criteria achieved:
 - candidate reference outputs generated for selected formal reference sections
 - long formal CESE reference section processed successfully into candidate references
 - statutory reference example handled successfully as a candidate reference
+- manual and AI-assisted reference-candidate review protocol drafted
+- four candidate outputs reviewed
+- first structured parsing input selected
 
 Current corpus:
 
@@ -783,17 +897,23 @@ Current candidate-boundary test outputs:
 - older CESE author-date examples broadly successful
 - APA-style example not yet reliable
 
+Current candidate review outputs:
+
+- 1 candidate output classified as SUITABLE_FOR_PARSING_EXPERIMENT
+- 2 candidate outputs classified as SUITABLE_WITH_KNOWN_WARNINGS
+- 1 candidate output classified as DEFERRED_STYLE_CLASS
+
 ---
 
-# 13. Current Missing Components
+# 14. Current Missing Components
 
 Not yet established:
 
 - structured individual reference parsing
+- parser output format
 - citation inventory
 - extraction manifest
-- extraction validation workflow beyond script-level inspection
-- formal acceptance threshold for candidate reference boundaries
+- structured parsing validation workflow
 - robust APA-style boundary detection
 - footnote-reference extraction workflow
 - infographic citation extraction workflow
@@ -803,11 +923,16 @@ Not yet established:
 - analytical database
 - publication-grade analytical outputs
 
-These components remain intentionally deferred until candidate reference boundary quality and structured parsing requirements are better understood.
+Partially resolved:
+
+- candidate-boundary review threshold for first structured parsing experiment
+- first parser input selection
+
+These components remain intentionally deferred until minimum viable structured parsing produces concrete examples.
 
 ---
 
-# 14. Confirmed Extraction Findings
+# 15. Confirmed Extraction and Review Findings
 
 Confirmed findings from current extraction reconnaissance:
 
@@ -824,6 +949,15 @@ Confirmed findings from current extraction reconnaissance:
 - some older CESE reports use page-level footnote references rather than consolidated reference sections
 - non-reference-section artefacts should be excluded from the first formal reference-section extraction pathway
 
+Confirmed findings from candidate review:
+
+- 2017 cognitive load candidate output is suitable for the first structured parsing experiment
+- 2020 classroom management candidate output is suitable with warnings
+- revisiting gifted education candidate output is suitable with warnings
+- 2015 tutoring interventions candidate output should be deferred as an APA-style boundary-detection case
+- candidate outputs are not final citation records
+- candidate review should remain separate from bibliographic validation
+
 Known extraction and boundary-detection quality issues:
 
 - two-column and image-adjacent layouts can degrade text extraction quality
@@ -831,56 +965,55 @@ Known extraction and boundary-detection quality issues:
 - observed artefacts include split letters, split words, awkward line breaks, and compressed adjacent references
 - publisher or institution tails may be incorrectly split into separate candidate references
 - APA-style initials may be incorrectly split into separate candidate references
+- URL-bearing references may absorb following references
+- page transition material can contaminate candidate output
 - candidate references are not yet structured parsed citation records
 
 Current implementation decision:
 
 Minimum viable extraction will target formal reference sections in selectable-text PDFs.
 
-Candidate boundary detection will remain explicitly draft until structured parsing requirements are clearer.
+Candidate boundary detection will remain explicitly draft.
 
-OCR, infographic citation handling, footnote-only citation extraction, aggressive text repair, enrichment, and citation-quality analysis are deferred until standard report extraction and candidate boundary detection are sufficiently understood.
+Structured parsing will begin with the 2017 cognitive load candidate output only.
+
+OCR, infographic citation handling, footnote-only citation extraction, APA-style boundary refinement, aggressive text repair, enrichment, and citation-quality analysis are deferred.
 
 ---
 
-# 15. Immediate Next Actions
+# 16. Immediate Next Actions
 
 Priority order:
 
-1. Clean temporary draft files from the working tree
-2. Confirm generated working outputs are not accidentally staged unless intentionally versioned
-3. Stage canonical implementation scripts only
-4. Commit current extraction and boundary-detection implementation work
-5. Update CHAT_INDEX.md with the resulting commit hash
-6. Commit CHAT_INDEX.md update
-7. Push commits
-8. Update CURRENT_STATE.md and ACTIVE_ISSUES.md if not included before the implementation commit
-9. Decide whether this PM chat should be retired after the current commit bundle is closed
+1. Save updated canonical review documents.
+2. Save updated ACTIVE_ISSUES.md.
+3. Save updated CURRENT_STATE.md.
+4. Check Git status.
+5. Stage review documentation and updated state documents.
+6. Commit review documentation and state updates.
+7. Update CHAT_INDEX.md with the resulting commit hash.
+8. Commit CHAT_INDEX.md update.
+9. Push commits.
+10. Begin minimum viable structured parser design for the 2017 cognitive load candidate output only.
 
-Current implementation files expected to be committed:
+Current document files expected to be committed:
 
-    scripts/inspect_pdf_text.py
-    scripts/extract_reference_section.py
-    scripts/inspect_reference_section.py
-    scripts/detect_reference_boundaries.py
-
-Current document files likely requiring commit:
-
+    docs/REFERENCE_CANDIDATE_REVIEW_PROTOCOL.md
+    docs/REFERENCE_CANDIDATE_REVIEW_RESULTS.md
     docs/ACTIVE_ISSUES.md
     docs/CURRENT_STATE.md
-    docs/CHAT_INDEX.md
 
-Temporary files that should not be committed:
-
-    scripts/detect_reference_boundaries-ref1.py
-    scripts/detect_reference_boundaries-ref2.py
-    scripts/detect_reference_boundaries-ref3.py
-
-Temporary candidate-output comparison files should not be treated as project provenance.
+CHAT_INDEX.md should be updated after the implementation/documentation commit hash exists.
 
 Recommended next implementation milestone after commit closure:
 
-Minimum viable structured reference parsing design, based only on observed candidate reference examples.
+Minimum viable structured reference parsing using:
+
+    data/working/reference_candidates/2017-cognitive-load-theory_reference_candidates.jsonl
+
+or, if needed:
+
+    data/working/reference_candidates/2017-cognitive-load-theory_reference_candidates.txt
 
 The next implementation milestone should remain narrowly scoped.
 
@@ -893,12 +1026,14 @@ The project should avoid premature expansion into:
 - advanced database design
 - citation matching
 - canonical entity modelling
+- DOI discovery
+- URL checking
 
-until candidate reference boundaries and structured reference parsing are working.
+until structured reference parsing is working.
 
 ---
 
-# 16. Active Risks
+# 17. Active Risks
 
 Current project risks:
 
@@ -908,13 +1043,14 @@ Current project risks:
 - premature infrastructure expansion
 - acquisition success creating pressure for over-expansion
 - extraction success creating pressure for premature enrichment
-- hidden complexity entering extraction workflows
+- parser implementation expanding into full citation infrastructure
+- hidden complexity entering extraction and parsing workflows
 - extraction workflow complexity
 - text extraction artefacts affecting reference parsing
 - layout-dependent PDF extraction errors
 - candidate boundary errors being mistaken for final citation records
+- review classifications being mistaken for bibliographic validation
 - non-standard citation-bearing artefacts being mistaken for extraction failures
-- temporary draft files being accidentally committed
 - excessive reliance on chat history instead of canonical documents
 
 Mitigation strategy:
@@ -923,16 +1059,17 @@ Mitigation strategy:
 - validate each layer before adding the next
 - preserve operational simplicity
 - continue acquisition-before-sophistication discipline
-- treat raw extraction, candidate boundary detection, structured parsing, enrichment, and analysis as separate stages
+- treat raw extraction, candidate boundary detection, candidate review, structured parsing, enrichment, and analysis as separate stages
 - perform candidate review before structured citation parsing
+- use 2017 cognitive load as the first parser baseline
 - avoid enrichment and canonicalisation until raw extraction and reference parsing are working
-- handle infographics, footnote-style citations, and APA-style edge cases as separate work classes
+- handle infographics, footnote-style citations, APA-style references, and publisher-tail false splits as separate work classes
 - clean working tree before committing
 - update canonical documents before retiring or handing over chat responsibility
 
 ---
 
-# 17. Operational Notes
+# 18. Operational Notes
 
 The project now possesses:
 
@@ -946,6 +1083,9 @@ The project now possesses:
 - minimum viable raw reference-section extraction
 - reference-section inspection
 - draft candidate reference-boundary detection
+- reference-candidate review protocol
+- reference-candidate review results
+- a selected first structured parsing input
 - a small but functioning educational research corpus
 
 The project does not yet possess:
@@ -964,6 +1104,7 @@ The extraction layer should be considered operational only for:
 - formal reference-section extraction
 - coarse reference-section inspection
 - draft candidate reference-boundary detection for selected formal CESE reference sections
+- candidate-output review for selected outputs
 
 The extraction layer should not yet be considered operational for:
 
@@ -973,11 +1114,13 @@ The extraction layer should not yet be considered operational for:
 - structured citation inventories
 - citation-quality analysis
 
-The immediate next task is commit closure and administrative stabilisation, not full citation parsing, metadata enrichment, or database construction.
+The immediate next task is commit closure for the review documentation and state updates.
+
+The next implementation task after commit closure is minimum viable structured reference parsing.
 
 ---
 
-# 18. Commit Tracking Notes
+# 19. Commit Tracking Notes
 
 Confirmed commits already recorded or known:
 
@@ -987,13 +1130,13 @@ Confirmed commits already recorded or known:
     0c9c07e Update project state and gitignore
     e7f8126 Update chat index commit register
     545d1e9 Update active issues for citation quality requirements
+    c630aad Add reference inspection and boundary detection workflows
+    cadd9bd Update chat index commit register
 
 Commits still to make or confirm:
 
-- inspect_pdf_text.py numbered reference-heading update
-- extract_reference_section.py numbered reference-heading update
-- inspect_reference_section.py
-- detect_reference_boundaries.py
+- REFERENCE_CANDIDATE_REVIEW_PROTOCOL.md
+- REFERENCE_CANDIDATE_REVIEW_RESULTS.md
 - ACTIVE_ISSUES.md update
 - CURRENT_STATE.md update
 - CHAT_INDEX.md update after commit hash exists

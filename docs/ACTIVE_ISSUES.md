@@ -1,8 +1,8 @@
 # ACTIVE_ISSUES.md
 
 Status: canonical operational issues register  
-Version: v0.3  
-Last updated: 2026-06-05
+Version: v0.4  
+Last updated: 2026-06-08
 
 ---
 
@@ -41,7 +41,8 @@ Current mitigation:
 - milestone-based delivery
 - explicit deferral policy
 - maintain distinction between current implementation tasks and future analytical requirements
-- continue treating current extraction work as minimum viable evidence-gathering, not full citation infrastructure
+- continue treating current extraction and parsing work as minimum viable evidence-gathering, not full citation infrastructure
+- continue to avoid enrichment, matching, and analytical claims until individual reference records exist
 
 Status:  
 Active
@@ -60,17 +61,19 @@ Description:
 
 Project effort may drift toward designing future systems rather than implementing current capabilities.
 
-This risk is heightened when valid future analytical requirements are identified before the prerequisite extraction layers are complete.
+This risk is heightened when valid future analytical requirements are identified before the prerequisite extraction and parsing layers are complete.
 
 Current mitigation:
 
 - acquisition-first sequencing
 - extraction-before-enrichment sequencing
+- reference-boundary review before structured parsing
 - implementation milestones
 - visible deliverables
 - architecture chat separation
-- defer schema and canonicalisation decisions until concrete extracted examples exist
+- defer schema and canonicalisation decisions until concrete parsed examples exist
 - treat current reference-boundary outputs as draft candidates, not final citation records
+- treat the first structured parser as a working experiment, not a database design exercise
 
 Status:  
 Active
@@ -80,7 +83,7 @@ Active
 ## ISSUE-003
 
 Title:  
-Extraction layer complexity
+Extraction and boundary-detection layer complexity
 
 Severity:  
 High
@@ -89,9 +92,9 @@ Description:
 
 Reference extraction from PDFs introduces substantially more complexity than acquisition.
 
-Raw reference-section extraction has now been demonstrated on selected CESE PDFs, and draft individual reference-boundary detection has been implemented for formal reference sections.
+Raw reference-section extraction has now been demonstrated on selected CESE PDFs, draft individual reference-boundary detection has been implemented for formal reference sections, and candidate outputs have been reviewed under a manual and AI-assisted review protocol.
 
-However, individual reference parsing has not yet been implemented, and boundary detection remains heuristic.
+However, structured individual reference parsing has not yet been implemented, and boundary detection remains heuristic.
 
 Known complexity includes:
 
@@ -104,9 +107,10 @@ Known complexity includes:
 - APA-style references with parenthesised years and initials
 - older CESE author-date references with unparenthesised years
 - legal or statutory references
+- URL-bearing references absorbing following references
 - artefacts with citations but no formal references section
 - footnote-only citation formats
-- distinction between raw section extraction, boundary detection, and structured citation parsing
+- distinction between raw section extraction, boundary detection, structured reference parsing, and later citation inventories
 
 Current mitigation:
 
@@ -116,9 +120,12 @@ Current mitigation:
 - numbered reference-heading detection implemented
 - reference-section inspection implemented
 - draft reference-boundary detection implemented
+- candidate review protocol established
+- candidate review results recorded
+- first structured parsing input selected conservatively
 - OCR deferred unless clearly required
 - infographic and footnote-style citation extraction deferred
-- APA-style boundary problems identified but not yet solved
+- APA-style boundary problems identified and deferred as a separate style class
 - current outputs treated as candidate references requiring review, not final citation inventory records
 
 Status:  
@@ -140,7 +147,7 @@ The project is expected to progress intermittently.
 
 Extended interruptions may increase restart friction and decision drift.
 
-The risk increases during exploratory implementation periods when several scripts and temporary outputs are created before commit discipline catches up.
+The risk increases during exploratory implementation periods when several scripts, review outputs, and temporary working artefacts are created before commit discipline catches up.
 
 Current mitigation:
 
@@ -154,6 +161,7 @@ Current mitigation:
 - small bounded implementation milestones
 - clean up temporary draft files before committing
 - avoid preserving draft script versions in the repository once a canonical script version exists
+- record review decisions in repository documents rather than relying on chat history
 
 Status:  
 Active
@@ -170,17 +178,19 @@ High
 
 Description:
 
-There is pressure to begin designing databases, schemas, enrichment workflows, citation-quality metrics, and analytical systems before individual reference parsing requirements are understood.
+There is pressure to begin designing databases, schemas, enrichment workflows, citation-quality metrics, and analytical systems before structured individual reference parsing requirements are understood.
 
 Current mitigation:
 
 - acquisition before extraction
 - raw extraction before reference parsing
 - reference-boundary detection before structured parsing
-- reference parsing before enrichment
+- candidate-boundary review before structured parsing
+- structured reference parsing before citation inventories
+- citation inventories before enrichment
 - enrichment before analysis
 - defer DOI omission and dead-link analysis until individual citation records exist
-- defer schema design until enough real citation examples have been inspected
+- defer schema design until enough real parsed citation examples have been inspected
 
 Status:  
 Active
@@ -210,6 +220,7 @@ Current mitigation:
 
 - record as a deferred analytical requirement
 - do not implement before individual reference parsing
+- do not implement before citation inventory structure exists
 - treat URL status as timestamped check evidence, not permanent truth
 - treat missing DOI as a derived claim requiring matched-work evidence
 - notify architecture chat before schema or canonicalisation decisions are made
@@ -244,8 +255,50 @@ Current mitigation:
 
 - treat boundary outputs as candidate references requiring review
 - retain confidence and embedded-split flags in candidate outputs
+- document known false splits in reference-candidate review results
 - do not treat reference candidates as final citation records
 - defer refinement until this issue blocks the next implementation stage or recurs across enough examples to justify a bounded fix
+
+Status:  
+Active
+
+---
+
+## ISSUE-008
+
+Title:  
+Structured parsing scope creep
+
+Severity:  
+High
+
+Description:
+
+The next implementation step is minimum viable structured reference parsing.
+
+There is risk that this step expands into:
+
+- full citation parsing
+- comprehensive reference-style handling
+- database schema design
+- OpenAlex or Crossref matching
+- DOI discovery
+- URL validation
+- canonical work/entity modelling
+- bibliographic correctness checking
+
+This would create substantial hidden complexity and could delay delivery of a minimal working pipeline.
+
+Current mitigation:
+
+- first parser input selected: 2017-cognitive-load-theory_reference_candidates.txt
+- parser should preserve raw reference text unchanged
+- parser should extract only conservative fields
+- parser should explicitly record parse uncertainty
+- parser should not write database records
+- parser should not perform enrichment, matching, DOI discovery, or URL checking
+- parser should not attempt to handle all reference styles in the first iteration
+- APA-style references remain deferred until later boundary refinement
 
 Status:  
 Active
@@ -268,7 +321,7 @@ Title:
 Minimum viable individual reference parsing workflow
 
 Status:  
-Unresolved
+Partially resolved
 
 Question:
 
@@ -276,28 +329,36 @@ How should candidate reference boundaries be transformed into individual referen
 
 Current context:
 
-The following scripts now exist or are in active implementation:
+The following scripts now exist:
 
 - scripts/inspect_pdf_text.py
 - scripts/extract_reference_section.py
 - scripts/inspect_reference_section.py
 - scripts/detect_reference_boundaries.py
 
-These currently support reconnaissance, raw reference-section extraction, reference-section inspection, and draft candidate boundary detection.
+The following review documents now exist or are being prepared:
 
-They do not yet parse candidate references into structured fields.
+- docs/REFERENCE_CANDIDATE_REVIEW_PROTOCOL.md
+- docs/REFERENCE_CANDIDATE_REVIEW_RESULTS.md
+
+Current reviewed candidate outputs show that the 2017 cognitive load candidate output is suitable as the first structured parsing baseline.
+
+The first structured parsing experiment should use:
+
+- data/working/reference_candidates/2017-cognitive-load-theory_reference_candidates.txt
+- preferably the paired JSONL candidate output if available
+
+The parser does not yet exist.
 
 Known considerations:
 
-- author-date citation style
-- APA-style citation variants
-- multi-line reference entries
-- page-layout artefacts
-- split words and initials
-- compressed adjacent references
-- publisher-tail false splits
-- legal/statutory references
-- non-standard artefacts without formal reference sections
+- preserve raw reference text unchanged
+- preserve candidate ID and source pages
+- preserve boundary confidence and boundary flags
+- extract conservative fields only
+- record parse status and parse notes
+- avoid overfitting to one document while still keeping the first parser bounded
+- do not introduce enrichment, DOI matching, URL checking, or database writes
 
 ---
 
@@ -307,7 +368,7 @@ Title:
 Reference-boundary validation threshold
 
 Status:  
-Unresolved
+Partially resolved
 
 Question:
 
@@ -315,18 +376,25 @@ What level of accuracy is sufficient for draft candidate reference boundaries be
 
 Current context:
 
-Boundary detection has been tested against selected CESE formal-reference reports.
+A manual and AI-assisted review protocol has been created, and four candidate outputs have been reviewed.
 
-Observed classes include:
+Current reviewed classifications:
 
-- older CESE author-date references
-- later CESE author-date references with parenthesised years
-- long formal reference sections
-- formal reports with no reference section
-- APA-style references with problematic initial splitting
-- legal/statutory references such as Education Act 1990 (NSW)
+- 2017 cognitive load: SUITABLE_FOR_PARSING_EXPERIMENT
+- 2020 classroom management: SUITABLE_WITH_KNOWN_WARNINGS
+- revisiting gifted education: SUITABLE_WITH_KNOWN_WARNINGS
+- 2015 tutoring interventions: DEFERRED_STYLE_CLASS
 
-The project has not yet defined a formal acceptance threshold for moving from candidate references to parsed citation records.
+Operational decision:
+
+The threshold for beginning a first structured parsing experiment has been met for the 2017 cognitive load candidate output only.
+
+Still unresolved:
+
+- formal quantitative acceptance threshold
+- how many reviewed documents are required before broader parsing work
+- how to treat candidate-level warnings during structured parsing
+- whether boundary review outcomes should become a persistent machine-readable manifest
 
 ---
 
@@ -373,13 +441,27 @@ Candidate reference-boundary detection currently records:
 - contains DOI flag
 - raw candidate text
 
+Reference-candidate review records currently identify:
+
+- source PDF
+- reference-section file
+- candidate output file
+- review date
+- reviewer
+- console summary
+- manual boundary checks
+- style class
+- classification
+- decision
+- notes
+
 Still unresolved:
 
 - extraction manifests
 - persistent provenance for individual reference parsing
 - provenance for text cleaning or repair
 - provenance for rejected or uncertain references
-- relationship between raw reference-section extraction, candidate boundaries, parsed references, and later matched works
+- relationship between raw reference-section extraction, candidate boundaries, review classifications, parsed references, and later matched works
 
 ---
 
@@ -402,6 +484,7 @@ The citation inventory will likely need to distinguish:
 - source document
 - raw reference-section extraction
 - candidate reference boundary record
+- reference-candidate review status
 - individual raw reference string
 - parsed citation fields
 - parsing confidence
@@ -410,7 +493,7 @@ The citation inventory will likely need to distinguish:
 - later matched work identifiers
 - later quality checks
 
-No schema should be designed until reference parsing examples exist.
+No schema should be designed until structured reference parsing examples exist.
 
 ---
 
@@ -552,7 +635,7 @@ Title:
 APA-style boundary detection
 
 Status:  
-Unresolved
+Deferred style class
 
 Question:
 
@@ -560,7 +643,7 @@ How should boundary detection handle APA-style references with parenthesised yea
 
 Current context:
 
-The 2015 tutoring intervention report exposed a failure mode where embedded splitting can over-split author initials.
+The 2015 tutoring intervention report exposed a systematic failure mode where embedded splitting over-splits author initials.
 
 Example pattern:
 
@@ -568,11 +651,60 @@ Example pattern:
 
 The current detector may split incorrectly after initials such as “M.” or “P.” if the following text later resembles a reference start.
 
+Reference-candidate review classified this document as:
+
+- DEFERRED_STYLE_CLASS
+
 Known considerations:
 
 This appears to be a general style-class issue rather than a single idiosyncratic reference.
 
 It should be addressed separately from older CESE author-date boundary detection.
+
+It should not block the first structured parsing experiment, which will use the 2017 cognitive load candidate output.
+
+---
+
+## UNKNOWN-011
+
+Title:  
+Parser output format
+
+Status:  
+Unresolved
+
+Question:
+
+What should the minimum viable structured parser output look like?
+
+Current context:
+
+The first parser should probably read candidate JSONL and produce a working output under data/working/.
+
+Possible conservative fields include:
+
+- candidate_id
+- source candidate file
+- source pages
+- raw reference text
+- boundary confidence
+- embedded boundary split flag
+- possible text damage flag
+- source-visible URL flag
+- source-visible DOI flag
+- detected year
+- first author or organisation string
+- title-like segment, only if safely detectable
+- parse status
+- parse notes
+
+Known considerations:
+
+- JSONL is likely appropriate for provenance-preserving intermediate output
+- CSV may be useful for manual inspection
+- raw reference text must be preserved unchanged
+- uncertain fields should be explicit rather than silently guessed
+- no database writes should occur in the first parser
 
 ---
 
@@ -604,6 +736,9 @@ Resolved:
 - numbered reference-section headings filtered from boundary detection input
 - selected long formal CESE reference section processed into candidate references
 - statutory reference example handled as a candidate reference
+- reference-candidate review protocol drafted
+- first set of candidate outputs reviewed
+- first structured parsing input selected
 
 These items should not be re-opened unless implementation experience identifies a genuine deficiency.
 
@@ -625,15 +760,17 @@ Deferred:
 
 - broad AU/NZ ecosystem acquisition
 - broad AERO acquisition expansion
-- structured individual reference parsing beyond candidate boundary detection
+- broad CESE acquisition expansion beyond current seed corpus
 - citation inventory implementation
 - extraction manifests
+- database schema design
 - OpenAlex enrichment
 - Crossref enrichment
 - DOI omission analysis
 - URL dead-link analysis
 - infographic citation extraction
 - footnote-only citation extraction
+- APA-style boundary refinement
 - OCR workflows
 - advanced identity resolution
 - ORCID reconciliation
@@ -652,7 +789,9 @@ Deferred:
 
 The following items should be raised with the architecture chat before schema, canonicalisation, or enrichment design begins:
 
-- distinction between raw source citation, extracted reference section, candidate reference boundary, parsed reference, matched work, and derived quality claim
+- distinction between raw source citation, extracted reference section, candidate reference boundary, reference-candidate review outcome, parsed reference, matched work, and derived quality claim
+- whether reference-candidate review outcomes should be persisted as first-class provenance records
+- provenance expectations for structured reference parsing
 - provenance expectations for DOI omission analysis
 - provenance expectations for URL integrity checking
 - whether URL status should be modelled as a timestamped observation rather than a citation attribute
@@ -661,7 +800,7 @@ The following items should be raised with the architecture chat before schema, c
 - how extraction-stage confidence should relate to later citation inventory records
 - whether candidate reference boundaries should be persisted as a first-class intermediate artefact
 
-No immediate architecture decision is required before further minimum viable extraction validation.
+No immediate architecture decision is required before the first minimum viable structured parsing experiment.
 
 ---
 
@@ -669,7 +808,10 @@ No immediate architecture decision is required before further minimum viable ext
 
 Review this document when one of the following occurs:
 
-- individual reference parsing begins
+- structured reference parsing begins
+- first parser output is generated
+- parser output format becomes stable enough to document
+- parser uncertainty handling proves inadequate
 - extraction manifests are proposed
 - citation inventory structure is proposed
 - OpenAlex or Crossref integration is proposed
